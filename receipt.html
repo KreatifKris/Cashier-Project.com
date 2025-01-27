@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struk Belanja</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: hsl(68, 100%, 52%);
+            margin: 0;
+            padding: 20px;
+            text-align: center; /* Memusatkan konten */
+        }
+        header {
+            background-color: hsl(57, 100%, 50%); /* Warna latar belakang header */
+            padding: 20px;
+            color: white;
+        }
+        img.logo {
+            max-width: 300px; /* Atur lebar maksimum logo */
+            height: auto; /* Atur tinggi logo secara otomatis */
+            margin: 100px 0; /* Margin atas dan bawah */
+        }
+        h1 {
+            text-align: center;
+        }
+        .receipt {
+            margin-top: 30px;
+        }
+        .receipt p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <marquee style="font-size: 40px;">SELAMAT DATANG DI MCDONALD PURI SURYA JAYA KAMMI SANGAT SENANG MELAYANI ANDA DENGAN HATI YANG TULUS SEPERTI LAGU HATI HATI DI JALAN SILAHKAN HATI-HATI SAAT MEMBELI JANGAN SAMPAI ADA BARANG YANG JATUH BAIK ITU DOMPET ATAUPUN TAS ANDA TERIMA KASIH TELAH BERKUNJUNG DI GERAI MCDONALD PURI SURYA JAYA DAN SELAMAT MENIKMATI HIDANGAN KAMI</marquee>
+</header>
+
+<img src="073462800_1557825616-mc.webp" alt="Logo Perusahaan" class="logo"> <!-- Ganti dengan nama file logo Anda -->
+
+<p>SELAMAT DATANG DI MC DONALD, SENANG MELAYANI ANDA</p>
+
+<h1>Struk Belanja</h1>
+
+<div>
+    <label for="buyerName">Nama Pembeli:</label>
+    <input type="text" id="buyerName" placeholder="Masukkan nama pembeli">
+</div>
+
+<div>
+    <label for="itemQty1">Jumlah Bagoray Ori:</label>
+    <input type="number" id="itemQty1" value="0" min="0">
+</div>
+
+<div>
+    <label for="itemQty2">Jumlah Bagoray Spesial:</label>
+    <input type="number" id="itemQty2" value="0" min="0">
+</div>
+
+<div>
+    <label for="itemQty3">Jumlah Es DoReMi:</label>
+    <input type="number" id="itemQty3" value="0" min="0">
+</div>
+<div>
+    <label for="itemQty4">Jumlah MC Flurry:</label>
+    <input type="number" id="itemQty4" value="0" min="0">
+</div>
+<div>
+    <label for="itemQty5">Jumlah Chicken Package:</label>
+    <input type="number" id="itemQty5" value="0" min="0">
+</div>
+<div>
+    <label for="itemQty6">Jumlah Chicken Package:</label>
+    <input type="number" id="itemQty6" value="0" min="0">
+</div>
+
+<button onclick="generateReceipt()">Cetak Struk</button>
+<button id="whatsappButton" style="display:none;">Kirim ke WhatsApp</button>
+
+<div class="receipt-container">
+    <div class="receipt" id="receipt"></div>
+</div>
+
+<script>
+    const items = [
+        { id: 'itemQty1', name: 'Bagoray Ori', price: 10000 },
+        { id: 'itemQty2', name: 'Bagoray Spesial', price: 15000 },
+        { id: 'itemQty3', name: 'Es DoReMi', price: 10000 },
+        { id: 'itemQty4', name: 'MC Flurry', price: 20000 },
+        { id: 'itemQty5', name: ' Chicken Package', price: 12000 },
+        { id: 'itemQty6', name: 'Chicken Package', price: 35000 },
+    ];
+
+    function generateReceipt() {
+        const buyerName = document.getElementById('buyerName').value;
+        const receiptContainer = document.getElementById('receipt');
+        let grandTotal = 0;
+        let receiptHtml = `<p>Nama Pembeli: ${buyerName || "-"}</p>`;
+
+        items.forEach((item) => {
+            const qty = parseInt(document.getElementById(item.id).value) || 0;
+            const total = qty * item.price;
+            grandTotal += total;
+            receiptHtml += `<p>${item.name}: ${qty} x Rp ${item.price.toLocaleString()} = Rp ${total.toLocaleString()}</p>`;
+        });
+
+        receiptHtml += `<hr><p><strong>Total: Rp ${grandTotal.toLocaleString()}</strong></p>`;
+        receiptContainer.innerHTML = receiptHtml;
+
+        const whatsappButton = document.getElementById('whatsappButton');
+        const message = encodeURIComponent(receiptHtml.replace(/<[^>]*>/g, '')); // Menghapus tag HTML
+        whatsappButton.style.display = 'block';
+        whatsappButton.onclick = function() {
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        };
+    }
+</script>
+</body>
+</html>
